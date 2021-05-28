@@ -1,14 +1,72 @@
 import React, { useState } from 'react';
-import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View ,Icon} from 'react-native';
+import { Image, SafeAreaView,Keyboard, Text, TextInput, TouchableOpacity, View ,Icon} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import { firebase } from '../../firebase/config';
 import { FontAwesome , Entypo, MaterialIcons } from '@expo/vector-icons';
-export default function UserProfileScreen() {
+//import  addInfo from '././Api/UserInfoApi';
+
+
+export default function UserProfileScreen({route,navigation}) {
     const [fullName, setFullName] = useState('')
     const [Address, setAddress] = useState('')
     const [Phone, setPhone] = useState('')
     const [NumOfFamily, setNumOfFamily] = useState('')
+    
+    const InfoRef = firebase.firestore().collection('UserInfo')
+    let userID= route.params;
+    
+   /* useEffect(() => {
+        InfoRef
+            .where("authorID", "==", userID)
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(
+                querySnapshot => {
+                    const newEntities = []
+                    querySnapshot.forEach(doc => {
+                        const entity = doc.data()
+                        entity.id = doc.id
+                        newEntities.push(entity)
+                    });
+                    setEntities(newEntities)
+                },
+                error => {
+                    console.log(error)
+                }
+            )
+    }, [])*/
+    const onSubmitPress = () => {
+        
+            //const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            const data = {
+                fullName,
+                Address,
+                Phone,
+                NumOfFamily,
+                authorID: userID,
+                //createdAt: timestamp,
+            };
+            InfoRef
+                
+                
+                .add(data)
+                .then(_doc => {
+                    setFullName('')
+                    Keyboard.dismiss()
+                    setAddress('')
+                    Keyboard.dismiss()
+                    setPhone('')
+                    Keyboard.dismiss()
+                    setNumOfFamily('')
+                    Keyboard.dismiss()
+                    navigation.navigate("UserProfile", {info: data})
+                })
+
+                .catch((error) => {
+                    alert(error)
+                });
+        
+    }
 
  return(
   
@@ -69,7 +127,7 @@ export default function UserProfileScreen() {
                </View>
                <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {}}>
+                    onPress={() => onSubmitPress ()}>
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
 
@@ -79,3 +137,4 @@ export default function UserProfileScreen() {
 
 
 }
+ 

@@ -10,6 +10,8 @@ export default function RegistrationScreen({navigation}) {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
+    
+
     const onFooterLinkPress = () => {
         navigation.navigate('Login')
     }
@@ -25,17 +27,19 @@ export default function RegistrationScreen({navigation}) {
             .createUserWithEmailAndPassword(email, password)
             .then((response) => {
                 const uid = response.user.uid
-                const data = {
+                let data = {
                     id: uid,
                     email,
                     Name,
                 };
+                
                 const usersRef = firebase.firestore().collection('users')
                 usersRef
                     .doc(uid)
                     .set(data)
                     .then(() => {
-                        navigation.navigate('Home', {user: data})
+                        
+                      navigation.navigate("EditUserProfile", {user: data.id})
                     })
                     .catch((error) => {
                         alert(error)

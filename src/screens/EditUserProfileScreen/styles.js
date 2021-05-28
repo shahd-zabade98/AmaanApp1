@@ -64,8 +64,7 @@ export default StyleSheet.create({
         fontSize: 16
     },
     text:{
-        fontWeight: 'bold',
-        color: "black"
+        fontWeight: 'bold'
     },
     userInfoSection: {
         paddingHorizontal : 30,

@@ -2,8 +2,9 @@ import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen,UserProfileScreen } from './src/screens'
+import { LoginScreen, HomeScreen, RegistrationScreen,EditUserProfileScreen, UserProfileScreen } from './src/screens'
 import {decode, encode} from 'base-64'
+import { firebase } from './src/firebase/config';
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
@@ -13,20 +14,24 @@ export default function App() {
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
-
+  
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="User Profile">
-        
+      <Stack.Navigator initialRouteName='Login'>
+      
+          <Stack.Screen name="Registration" component={RegistrationScreen} />
+          <Stack.Screen name="EditUserProfile" component={EditUserProfileScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
             
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Registration" component={RegistrationScreen} />
-            <Stack.Screen name="User Profile" component={UserProfileScreen} />
-        
+            
+            <Stack.Screen name="UserProfile" component={UserProfileScreen} />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );
+  
+
 }
 
 import {Platform, InteractionManager} from 'react-native';

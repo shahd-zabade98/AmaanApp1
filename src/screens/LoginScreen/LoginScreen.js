@@ -29,7 +29,7 @@ export default function LoginScreen({navigation}) {
                             return;
                         }
                         const user = firestoreDocument.data()
-                        navigation.navigate('Home')
+                        navigation.navigate("EditUserProfile", {user: uid})
                     })
                     .catch(error => {
                         alert(error)
